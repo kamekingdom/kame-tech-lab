@@ -1,0 +1,22 @@
+{
+    "welcome": "Welcome",
+    "profile_title": "Profile",
+    "profile_description": "My research interests center on utilizing information technology to address societal needs and challenges, aiming to enhance convenience and enrich daily life. Specifically, I focus on the fields of lifestyle computing and natural user interfaces (NUIs). By developing machine learning-based interfaces, I strive to create innovative interaction designs that improve quality of life and user experience.",
+    "profile_name": "Yudai Nakamura",
+    "profile_position": "Master's 1st year",
+    "profile_link_title": "Profiles",
+    "education_title": "Education",
+    "education_text2": "Kwansei Gakuin University, Engineering",
+    "education_text1": "Keio University, Science and Technology",
+    "activity_title": "Activity",
+    "search_placeholder": "Search...",
+    "sort_newest": "Newest",
+    "sort_oldest": "Oldest",
+    "sort_title": "Title",
+    "no_projects": "No project data available",
+    "tag_oral": "Oral Presentation",
+    "tag_demo": "Demo",
+    "tag_full": "Full Paper",
+    "tag_general": "General",
+    "tag_internal": "Internal"
+}

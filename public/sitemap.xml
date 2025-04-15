@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://kame-tech-lab.web.app/</loc>
+    <lastmod>2024-11-29</lastmod> <!-- ページの最終更新日を記入 -->
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://kame-tech-lab.web.app/project-detail</loc>
+    <lastmod>2024-11-29</lastmod> <!-- ページの最終更新日を記入 -->
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
