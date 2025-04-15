@@ -177,9 +177,8 @@ const MainPage = () => {
                                 {t("profile_description")}
                             </p>
                             <div className="row mt-4 d-flex align-items-stretch">
-
-                                <div className="col-md-4 h-100">
-                                    <h4 style={{ fontWeight: "bold", fontSize: "1.25rem", marginBottom: "10px" }}>{t("profile_link_title")}</h4>
+                                <div className="col-md-4 h-100 mb-4 mb-md-0">
+                                    <h4 style={{ fontWeight: "bold", fontSize: "1.25rem", marginBottom: "15px" }}>{t("profile_link_title")}</h4>
                                     <ul style={{ color: "#606060", listStyleType: "none", paddingLeft: "0", marginBottom: "0" }}>
                                         <li>
                                             <a href="https://github.com/kamekingdom" target="_blank" rel="noopener noreferrer" style={{ color: "#333", textDecoration: "none", display: "flex", alignItems: "center" }}>
@@ -199,15 +198,13 @@ const MainPage = () => {
                                     </ul>
                                 </div>
                                 <div className="col-md-6">
-                                    <h4 style={{ fontWeight: "bold", fontSize: "1.25rem", marginBottom: "10px" }}>{t("education_title")}</h4>
+                                    <h4 style={{ fontWeight: "bold", fontSize: "1.25rem", marginBottom: "15px" }}>{t("education_title")}</h4>
                                     <ul style={{ color: "#606060", listStyleType: "none", paddingLeft: "0", marginBottom: "0" }}>
                                         <li>{t("education_text1")}</li>
                                         <li>{t("education_text2")}</li>
                                     </ul>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
