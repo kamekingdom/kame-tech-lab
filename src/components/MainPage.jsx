@@ -182,6 +182,11 @@ const MainPage = () => {
                                     <h4 style={{ fontWeight: "bold", fontSize: "1.25rem", marginBottom: "15px" }}>{t("profile_link_title")}</h4>
                                     <ul style={{ color: "#606060", listStyleType: "none", paddingLeft: "0", marginBottom: "0" }}>
                                         <li>
+                                            <a href="https://note.com/kamekingdom" target="_blank" rel="noopener noreferrer" style={{ color: "#41c9b4", textDecoration: "none", display: "flex", alignItems: "center" }}>
+                                                <FaRegStickyNote style={{ marginRight: "8px" }} /> Note
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="https://github.com/kamekingdom" target="_blank" rel="noopener noreferrer" style={{ color: "#333", textDecoration: "none", display: "flex", alignItems: "center" }}>
                                                 <FaGithub style={{ marginRight: "8px" }} /> GitHub
                                             </a>
@@ -189,11 +194,6 @@ const MainPage = () => {
                                         <li>
                                             <a href="https://www.linkedin.com/in/yudai-nakamura-kamekingdom/" target="_blank" rel="noopener noreferrer" style={{ color: "#0a66c2", textDecoration: "none", display: "flex", alignItems: "center" }}>
                                                 <FaLinkedin style={{ marginRight: "8px" }} /> LinkedIn
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="https://note.com/kamekingdom" target="_blank" rel="noopener noreferrer" style={{ color: "#41c9b4", textDecoration: "none", display: "flex", alignItems: "center" }}>
-                                                <FaRegStickyNote style={{ marginRight: "8px" }} /> Note
                                             </a>
                                         </li>
                                     </ul>
