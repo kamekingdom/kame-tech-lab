@@ -11,6 +11,7 @@ import "../style.css";
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next"; // i18n用フックのインポート
 import { FaLinkedin, FaGithub, FaTwitter, FaEnvelope } from "react-icons/fa";
+import { FaRegStickyNote } from "react-icons/fa";
 
 
 
@@ -191,8 +192,8 @@ const MainPage = () => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="https://twitter.com/kame_research" target="_blank" rel="noopener noreferrer" style={{ color: "#1DA1F2", textDecoration: "none", display: "flex", alignItems: "center" }}>
-                                                <FaTwitter style={{ marginRight: "8px" }} /> Twitter
+                                            <a href="https://note.com/kamekingdom" target="_blank" rel="noopener noreferrer" style={{ color: "#41c9b4", textDecoration: "none", display: "flex", alignItems: "center" }}>
+                                                <FaRegStickyNote style={{ marginRight: "8px" }} /> Note
                                             </a>
                                         </li>
                                     </ul>
