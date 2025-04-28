@@ -37,7 +37,7 @@ kame-tech-lab/
 
 ---
 
-## 🛠 Firebase Hosting Setup
+## Firebase Hosting Setup
 
 If you want to deploy yourself:
 
