@@ -1,11 +1,11 @@
-# 🧪 Kame Tech Lab (2023)
+# Kame Tech Lab (2023)
 
 A portfolio site built with **React** and **Bootstrap**, deployed via **Firebase Hosting**.  
 Showcases award-winning research, interactive AI applications, and full-stack development projects.
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Frontend**: React + Bootstrap
 - **Hosting**: Firebase Hosting
@@ -14,13 +14,13 @@ Showcases award-winning research, interactive AI applications, and full-stack de
 
 ---
 
-## 🌐 Live URL
+## URL
 
 🔗 [https://kame-tech-lab.web.app](https://kame-tech-lab.web.app)
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 kame-tech-lab/
@@ -34,23 +34,6 @@ kame-tech-lab/
 ├── package.json
 └── README.md
 ```
-
----
-
-## 🧑‍💼 Featured Projects
-
-- 🎮 **Picture Hunter II**  
-  Real-time interactive game using multimodal LLMs and image captioning.  
-  → Awarded at EC2024 (Best Demo)
-
-- 📝 **KG Career Correction System**  
-  NLP-based GUI app for plagiarism detection and keyword grading.
-
-- 🎼 **Deep Stream App**  
-  300+ member music club management system (originally built with Flutter).
-
-- 💠 **Internship Systems**  
-  Full-stack APIs & interfaces developed at Heartland IT Innovation, Inc.
 
 ---
 
