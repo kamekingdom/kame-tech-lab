@@ -54,7 +54,7 @@ firebase deploy
 
 ---
 
-## 📄 License
+## License
 
 MIT License
 
