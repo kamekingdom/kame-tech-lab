@@ -1,4 +1,4 @@
-# Portfolio Website(2023)
+# Portfolio Website (2023)
 
 A portfolio site built with **React** and **Bootstrap**, deployed via **Firebase Hosting**.  
 Showcases award-winning research, interactive AI applications, and full-stack development projects.
