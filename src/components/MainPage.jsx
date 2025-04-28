@@ -102,7 +102,7 @@ const MainPage = () => {
     const getTypeColor = (type) => {
         switch (type) {
             case "口頭発表":
-            case "Oral Presentation":
+            case "Presentation":
                 return "#336699"; // 青
             case "デモポスター":
             case "Demo Poster":
