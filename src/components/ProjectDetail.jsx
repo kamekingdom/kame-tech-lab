@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase"; // Firebase設定
@@ -42,7 +42,7 @@ const ProjectDetail = () => {
 
     useEffect(() => {
         if (projectData) {
-            const sliderItems = buildSliderContent(projectData);
+            // const sliderItems = buildSliderContent(projectData);
 
             // Tiny Sliderのインスタンスを初期化
             const slider = tns({
@@ -64,47 +64,47 @@ const ProjectDetail = () => {
     }, [projectData]);
 
     // スライダーのコンテンツを構築
-    const buildSliderContent = (projectData) => {
-        const sliderContainer = document.querySelector(".my-slider");
-        if (!sliderContainer) return;
+    // const buildSliderContent = (projectData) => {
+    //     const sliderContainer = document.querySelector(".my-slider");
+    //     if (!sliderContainer) return;
 
-        const sliderContent = [];
+    //     const sliderContent = [];
 
-        // 1ページ目: main_image
-        if (projectData.main_image) {
-            sliderContent.push(`
-                <div>
-                    <img src="${projectData.main_image}" alt="Main Image" class="media-fluid" 
-                        style="width: 100%; max-height: 500px; object-fit: contain;" />
-                </div>
-            `);
-        }
+    //     // 1ページ目: main_image
+    //     if (projectData.main_image) {
+    //         sliderContent.push(`
+    //             <div>
+    //                 <img src="${projectData.main_image}" alt="Main Image" class="media-fluid" 
+    //                     style="width: 100%; max-height: 500px; object-fit: contain;" />
+    //             </div>
+    //         `);
+    //     }
 
-        // 2ページ目以降: images または videos
-        // if (projectData.videos?.length) {
-        //     projectData.videos.forEach((video) => {
-        //         sliderContent.push(`
-        //             <div>
-        //                 <video src="${video}" controls class="media-fluid" 
-        //                     style="width: 100%; max-height: 500px; object-fit: contain;">
-        //                 </video>
-        //             </div>
-        //         `);
-        //     });
-        // } else 
-        if (projectData.images?.length) {
-            projectData.images.forEach((image) => {
-                sliderContent.push(`
-                    <div>
-                        <img src="${image}" alt="Slide Image" class="media-fluid" 
-                            style="width: 100%; max-height: 500px; object-fit: contain;" />
-                    </div>
-                `);
-            });
-        }
+    //     // 2ページ目以降: images または videos
+    //     // if (projectData.videos?.length) {
+    //     //     projectData.videos.forEach((video) => {
+    //     //         sliderContent.push(`
+    //     //             <div>
+    //     //                 <video src="${video}" controls class="media-fluid" 
+    //     //                     style="width: 100%; max-height: 500px; object-fit: contain;">
+    //     //                 </video>
+    //     //             </div>
+    //     //         `);
+    //     //     });
+    //     // } else 
+    //     if (projectData.images?.length) {
+    //         projectData.images.forEach((image) => {
+    //             sliderContent.push(`
+    //                 <div>
+    //                     <img src="${image}" alt="Slide Image" class="media-fluid" 
+    //                         style="width: 100%; max-height: 500px; object-fit: contain;" />
+    //                 </div>
+    //             `);
+    //         });
+    //     }
 
-        sliderContainer.innerHTML = sliderContent.join("");
-    };
+    //     sliderContainer.innerHTML = sliderContent.join("");
+    // };
 
     // ページ番号の更新
     const updatePageNumber = (info) => {

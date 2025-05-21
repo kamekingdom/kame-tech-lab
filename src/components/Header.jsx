@@ -1,7 +1,6 @@
-import React from "react";
 import { useTranslation } from "react-i18next"; // i18n用フック
 import Dropdown from "react-bootstrap/Dropdown";
-import { FaGlobe, FaFlagUsa, FaFlag } from "react-icons/fa"; // React Iconsからのアイコンインポート
+import { FaGlobe } from "react-icons/fa"; // React Iconsからのアイコンインポート
 
 const Header = () => {
     const { i18n } = useTranslation();

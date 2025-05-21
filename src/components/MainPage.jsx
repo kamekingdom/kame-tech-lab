@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import { db } from "../firebase"; // Firestoreのインポート
 import { collection, getDocs } from "firebase/firestore";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
-import { BiMap, BiMapPin } from "react-icons/bi"; // Bootstrapの地図ピンアイコンをインポート
+import { BiMapPin } from "react-icons/bi"; // Bootstrapの地図ピンアイコンをインポート
 import { BiSearch } from "react-icons/bi"; // 虫眼鏡アイコンのインポート
 import Header from "./Header";
 import Footer from "./Footer";
 import "../style.css";
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next"; // i18n用フックのインポート
-import { FaLinkedin, FaGithub, FaTwitter, FaEnvelope } from "react-icons/fa";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { FaRegStickyNote } from "react-icons/fa";
 
 
@@ -25,15 +26,15 @@ const MainPage = () => {
     const { t } = useTranslation(); // 翻訳関数の取得
 
     // ソート関数（常に新しい順）
-    const sortProjects = (projects) => {
+    const sortProjects = useCallback((projects) => {
         return projects
             .map((project) => ({
                 ...project,
-                date: validateAndFormatDate(project.date), // 日付を検証・修正
+                date: validateAndFormatDate(project.date),
             }))
-            .filter((project) => project.date !== null) // 無効な日付を除外
-            .sort((a, b) => new Date(b.date) - new Date(a.date)); // 新しい順
-    };
+            .filter((project) => project.date !== null)
+            .sort((a, b) => new Date(b.date) - new Date(a.date));
+    }, []);
 
     // 日付フォーマットのチェックと修正
     const validateAndFormatDate = (dateString) => {
@@ -60,24 +61,24 @@ const MainPage = () => {
     // useEffect内の変更
     useEffect(() => {
         const fetchProjects = async () => {
-            setIsLoading(true); // ローディング開始
+            setIsLoading(true);
             try {
                 const querySnapshot = await getDocs(collection(db, "projects"));
                 const projectList = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
                 }));
-                const sortedList = sortProjects(projectList); // 新しい順にソート
-                setProjects(sortedList); // ソート済みのリストをセット
+                const sortedList = sortProjects(projectList);
+                setProjects(sortedList);
             } catch (error) {
                 console.error("Error fetching projects:", error);
             } finally {
-                setIsLoading(false); // ローディング終了
+                setIsLoading(false);
             }
         };
 
         fetchProjects();
-    }, []);
+    }, [sortProjects]);
 
     // ソートされたプロジェクト
     const sortedProjects = sortProjects(projects, sortCriterion);
@@ -201,8 +202,9 @@ const MainPage = () => {
                                 <div className="col-md-6">
                                     <h4 style={{ fontWeight: "bold", fontSize: "1.25rem", marginBottom: "15px" }}>{t("education_title")}</h4>
                                     <ul style={{ color: "#606060", listStyleType: "none", paddingLeft: "0", marginBottom: "0" }}>
-                                        <li>{t("education_text1")}</li>
-                                        <li>{t("education_text2")}</li>
+                                        <li># Human Computer Interaction</li>
+                                        <li># Multimodal AI</li>
+                                        <li># Deep Learning</li>
                                     </ul>
                                 </div>
                             </div>

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { db, storage } from "../firebase";
 import {
     collection,
-    addDoc,
     getDocs,
-    updateDoc,
     deleteDoc,
     doc,
     setDoc
@@ -53,7 +51,6 @@ const ProjectManager = () => {
     const [uploadProgress, setUploadProgress] = useState([]);
     const [deleteProgress, setDeleteProgress] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
-    const [typeInput, setTypeInput] = useState(""); // タイプ入力用
     const [typeList, setTypeList] = useState([]); // タイプリスト
     const [authorInput, setAuthorInput] = useState(""); // 著者入力用
     const [authorList, setAuthorList] = useState([]); // 著者リスト
@@ -142,7 +139,7 @@ const ProjectManager = () => {
             }
 
             // プロジェクトデータの準備
-            const projectTypes = newProject.type.split(",").map((type) => type.trim());
+            // const projectTypes = newProject.type.split(",").map((type) => type.trim());
             const projectData = {
                 ...newProject,
                 type: typeList,
@@ -164,6 +161,15 @@ const ProjectManager = () => {
             console.error("Error saving project:", error);
         }
     };
+
+    // 種類のオプション
+    const typesOptions = [
+        "口頭発表",
+        "デモポスター",
+        "フルペーパー",
+        "一般",
+        "学内発表",
+    ];
 
 
     // Reset form
@@ -256,7 +262,7 @@ const ProjectManager = () => {
                 <button
                     className="btn btn-primary"
                     onClick={() => {
-                        if (password === "Kame2002") {
+                        if (password === "Kame-2002") {
                             setIsAuthenticated(true);
                         } else {
                             alert("Incorrect password!");
@@ -271,80 +277,80 @@ const ProjectManager = () => {
 
     return (
         <div className="container py-5">
-            <h1 className="mb-4">Project Manager (ver {packageInfo.version})</h1>
+            <h1 className="mb-4">プロジェクト管理画面(ver {packageInfo.version})</h1>
 
             {/* Project Form */}
             <div className="mb-4">
-                <h3>{isEditing ? "Edit Project" : "Add New Project"}</h3>
-                <input
-                    type="text"
-                    placeholder="Category ( academic || product )"
-                    className="form-control mb-2"
+                <h3>{isEditing ? "Edit Project" : "新規作成"}</h3>
+                <label className="form-label">カテゴリ</label>
+                <select
+                    className="form-select mb-2"
                     value={newProject.category}
-                    onChange={(e) => setNewProject({ ...newProject, category: e.target.value })}
-                />
+                    onChange={(e) =>
+                        setNewProject({ ...newProject, category: e.target.value })
+                    }
+                >
+                    <option value="">Select Category</option>
+                    <option value="academic">Academic</option>
+                    <option value="product">Product</option>
+                </select>
 
+                <label className="form-label">プロジェクト固有名</label>
                 <input
                     type="text"
-                    placeholder="Project ID"
+                    placeholder="project-url"
                     className="form-control mb-2"
                     value={newProject.id}
                     onChange={(e) => setNewProject({ ...newProject, id: e.target.value })}
                     disabled={isEditing}
                 />
+
                 {/* Type 入力欄 */}
                 <div className="mb-4">
-                    <label>Type</label>
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={typeInput}
-                            onChange={(e) => setTypeInput(e.target.value)}
-                        />
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => {
-                                if (typeInput.trim() && !typeList.includes(typeInput.trim())) {
-                                    setTypeList([...typeList, typeInput.trim()]);
-                                    setTypeInput(""); // 入力フィールドをリセット
-                                }
-                            }}
-                        >
-                            Add Type
-                        </button>
-                    </div>
-                    <div className="mt-2">
-                        {typeList.map((type, index) => (
-                            <span
-                                key={index}
-                                className="badge bg-secondary me-2"
-                                onClick={() =>
-                                    setTypeList(typeList.filter((t) => t !== type))
-                                }
-                                style={{ cursor: "pointer" }}
-                            >
-                                {type} &times;
-                            </span>
+                    <label className="form-label">形式</label>
+                    <div>
+                        {typesOptions.map((type) => (
+                            <div key={type} className="form-check form-check-inline">
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    id={`type-${type}`}
+                                    value={type}
+                                    checked={typeList.includes(type)}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setTypeList([...typeList, type]);
+                                        } else {
+                                            setTypeList(typeList.filter((t) => t !== type));
+                                        }
+                                    }}
+                                />
+                                <label className="form-check-label" htmlFor={`type-${type}`}>
+                                    {type}
+                                </label>
+                            </div>
                         ))}
                     </div>
                 </div>
+
+
+
                 <input
                     type="text"
-                    placeholder="Title"
+                    placeholder="タイトル"
                     className="form-control mb-2"
                     value={newProject.title}
                     onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
                 />
                 <input
                     type="text"
-                    placeholder="Subtitle"
+                    placeholder="サブタイトル"
                     className="form-control mb-2"
                     value={newProject.subtitle}
                     onChange={(e) => setNewProject({ ...newProject, subtitle: e.target.value })}
                 />
                 <textarea
-                    placeholder="Description"
+                    placeholder="説明"
                     className="form-control mb-2"
                     value={newProject.description}
                     onChange={(e) =>
@@ -353,7 +359,7 @@ const ProjectManager = () => {
                 />
                 <input
                     type="text"
-                    placeholder="Location"
+                    placeholder="開催場所"
                     className="form-control mb-2"
                     value={newProject.location}
                     onChange={(e) => setNewProject({ ...newProject, location: e.target.value })}
@@ -364,9 +370,10 @@ const ProjectManager = () => {
                     value={newProject.date}
                     onChange={(e) => setNewProject({ ...newProject, date: e.target.value })}
                 />
+
                 {/* Authors 入力欄 */}
                 <div className="mb-4">
-                    <label>Authors</label>
+                    <label>著者</label>
                     <div className="input-group">
                         <input
                             type="text"
@@ -401,20 +408,20 @@ const ProjectManager = () => {
                         ))}
                     </div>
                 </div>
-                <label className="form-label">Main Image</label>
+                <label className="form-label">画像</label>
                 <input
                     type="file"
                     className="form-control mb-2"
                     onChange={(e) => setMainImageFile(e.target.files[0])}
                 />
-                <label className="form-label">Additional Images</label>
+                {/* <label className="form-label">Additional Images</label>
                 <input
                     type="file"
                     multiple
                     className="form-control mb-2"
                     onChange={(e) => setImageFiles(Array.from(e.target.files))}
-                />
-                <label className="form-label">Videos</label>
+                /> */}
+                <label className="form-label">動画</label>
                 <input
                     type="file"
                     multiple
@@ -425,7 +432,7 @@ const ProjectManager = () => {
             </div>
             {/* Journal Information */}
             <div className="mb-4">
-                <h5>Journal Information</h5>
+                <h5>論文情報</h5>
                 <input
                     type="text"
                     placeholder="Journal Name"
@@ -478,10 +485,10 @@ const ProjectManager = () => {
 
             {/* Award */}
             <div className="mb-4">
-                <label>Award</label>
+                <label>賞</label>
                 <input
                     type="text"
-                    placeholder="Award"
+                    placeholder="Award Title"
                     className="form-control mb-2"
                     value={newProject.award}
                     onChange={(e) => setNewProject({ ...newProject, award: e.target.value })}
@@ -490,21 +497,21 @@ const ProjectManager = () => {
 
             {/* URLs */}
             <div className="mb-4">
-                <label>URL</label>
+                <label>論文URL</label>
                 <input
                     type="text"
-                    placeholder="URL"
-                    className="form-control mb-2"
-                    value={newProject.url}
-                    onChange={(e) => setNewProject({ ...newProject, url: e.target.value })}
-                />
-                <label>Source URL</label>
-                <input
-                    type="text"
-                    placeholder="Source URL"
+                    placeholder="Paper URL"
                     className="form-control mb-2"
                     value={newProject.sourceUrl}
                     onChange={(e) => setNewProject({ ...newProject, sourceUrl: e.target.value })}
+                />
+                <label>関連URL</label>
+                <input
+                    type="text"
+                    placeholder="Related URL"
+                    className="form-control mb-2"
+                    value={newProject.url}
+                    onChange={(e) => setNewProject({ ...newProject, url: e.target.value })}
                 />
             </div>
 

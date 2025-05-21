@@ -1,5 +1,3 @@
-import React from "react";
-
 const Loader = ({ color = "#808080", size = "3rem" }) => {
     return (
         <div className="text-center py-5">

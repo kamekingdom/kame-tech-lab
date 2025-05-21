@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore"; // Firestoreのインポート
 import { getStorage } from "firebase/storage";     // Storageのインポート
-import { getAnalytics } from "firebase/analytics";
+// import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";  // Authenticationのインポート
 
 // Your web app's Firebase configuration
@@ -18,7 +18,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 
 // FirestoreとStorageのインスタンスを初期化
 const db = getFirestore(app);
