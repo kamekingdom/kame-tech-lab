@@ -169,6 +169,7 @@ const MainPage = () => {
                                 }}
                             />
                             <p style={{ fontSize: "1.5rem", fontWeight: "bold", marginTop: "15px", color: "black" }}>{t("profile_name")}</p>
+                            {t("profile_affiliation")}
                             <p style={{ fontSize: "1rem", fontWeight: "normal", color: "#606060" }}>{t("profile_position")}</p>
                         </div>
 
