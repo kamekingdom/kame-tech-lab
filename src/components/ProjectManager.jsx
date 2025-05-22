@@ -485,7 +485,7 @@ const ProjectManager = () => {
 
             {/* Award */}
             <div className="mb-4">
-                <label>賞</label>
+                <label>表彰</label>
                 <input
                     type="text"
                     placeholder="Award Title"
@@ -505,7 +505,7 @@ const ProjectManager = () => {
                     value={newProject.sourceUrl}
                     onChange={(e) => setNewProject({ ...newProject, sourceUrl: e.target.value })}
                 />
-                <label>関連URL</label>
+                <label>表彰関連URL</label>
                 <input
                     type="text"
                     placeholder="Related URL"
