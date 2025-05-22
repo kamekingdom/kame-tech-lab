@@ -11,115 +11,152 @@ import "../style.css";
 import { FaFileAlt, FaTrophy } from "react-icons/fa";
 import Loader from "./Loader";
 
+/**
+ * ProjectDetail コンポーネント
+ * ------------------------------------------------------------
+ * Firestore に格納されたプロジェクトドキュメントを取得し，
+ * そのメタデータを Tiny-Slider で閲覧可能な形に整形して描画する．
+ * 主要な変更点：
+ *   1.  動画（videos または movie フィールド）が存在する場合には
+ *       main_image よりも高い優先度でスライドの先頭に配置する．
+ *   2.  スライド生成ロジックを関数 buildSliderContent に集約．
+ *   3.  スライド要素生成を appendVideo / appendImage のヘルパで抽象化．
+ * ------------------------------------------------------------
+ */
 const ProjectDetail = () => {
     const [projectData, setProjectData] = useState(null);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
 
-    // URLからプロジェクトIDを取得
+    // URL からクエリパラメータ id を抽出
     const projectId = new URLSearchParams(location.search).get("id");
 
+    /* ------------------------------------------------------------------
+     *  Firestore からドキュメントを非同期に取得
+     * ---------------------------------------------------------------- */
     useEffect(() => {
         const fetchProjectData = async () => {
             try {
-                const docRef = doc(db, "projects", projectId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    setProjectData(docSnap.data());
+                const snap = await getDoc(doc(db, "projects", projectId));
+                if (snap.exists()) {
+                    setProjectData(snap.data());
                 } else {
                     console.error("Project not found:", projectId);
                 }
-            } catch (error) {
-                console.error("Error fetching project data:", error);
+            } catch (err) {
+                console.error("Error fetching project data:", err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchProjectData();
     }, [projectId]);
 
+    /* ------------------------------------------------------------------
+     *  プロジェクトメタデータが取得できたらスライダーを構築
+     * ---------------------------------------------------------------- */
     useEffect(() => {
-        if (projectData) {
-            buildSliderContent(projectData);
+        if (!projectData) return;
 
-            // Tiny Sliderのインスタンスを初期化
-            const slider = tns({
-                container: ".my-slider",
-                items: 1,
-                slideBy: "page",
-                autoplay: false,
-                controls: true,
-                nav: false,
-                loop: true,
-                prevButton: ".tns-prev",
-                nextButton: ".tns-next",
-                onInit: (info) => updatePageNumber(info),
-            });
+        buildSliderContent(projectData);
 
-            // ページ番号の更新
-            slider.events.on("indexChanged", (info) => updatePageNumber(info));
-        }
+        const slider = tns({
+            container: ".my-slider",
+            items: 1,
+            slideBy: "page",
+            autoplay: true,
+            autoplayTimeout: 5000,
+            autoplayButtonOutput: false,
+            controls: true,
+            nav: false,
+            loop: true,
+            prevButton: ".tns-prev",
+            nextButton: ".tns-next",
+            onInit: updatePageNumber,
+        });
+
+        slider.events.on("indexChanged", updatePageNumber);
     }, [projectData]);
 
-    // スライダーのコンテンツを構築
-    const buildSliderContent = (projectData) => {
-        const sliderContainer = document.querySelector(".my-slider");
-        if (!sliderContainer) return;
+    /* ------------------------------------------------------------------
+     *  Tiny-Slider 用の DOM 要素を動的生成
+     *   優先順位： videos 配列 > movie 単一 URL > main_image
+     * ---------------------------------------------------------------- */
+    const buildSliderContent = (data) => {
+        const container = document.querySelector(".my-slider");
+        if (!container) return;
 
-        const sliderContent = [];
+        const slides = [];
 
-        // 1ページ目: main_image
-        if (projectData.main_image) {
-            sliderContent.push(`
-                <div>
-                    <img src="${projectData.main_image}" alt="Main Image" class="media-fluid" 
-                        style="width: 100%; max-height: 500px; object-fit: contain;" />
-                </div>
-            `);
+        /**
+         * 動画埋め込み：ブラウザ UI とダウンロード操作を極力抑制
+         *   - controls   : 付けない → 既定 UI を非表示
+         *   - controlsList: nodownload noremoteplayback nofullscreen
+         *   - disablePictureInPicture / disableRemotePlayback
+         *   - oncontextmenu="return false;" で右クリック保存を抑制
+         *   - pointer-events:none でクリック／タップ無効化 (ただし再生は自動)
+         */
+        const appendVideo = (src) => {
+            slides.push(`
+        <div>
+          <video
+            src="${src}"
+            autoplay
+            muted
+            loop
+            playsinline
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload noremoteplayback nofullscreen"
+            oncontextmenu="return false;"
+            class="media-fluid"
+            style="width: 100%; max-height: 500px; object-fit: contain; pointer-events: none;"
+          ></video>
+        </div>`);
+        };
+
+
+        const appendImage = (src, alt = "Slide Image") => {
+            slides.push(`
+        <div>
+          <img src="${src}" alt="${alt}" class="media-fluid"
+               style="width: 100%; max-height: 500px; object-fit: contain;" />
+        </div>`);
+        };
+
+        // 1. 動画があれば最優先で追加
+        if (Array.isArray(data.videos) && data.videos.length) {
+            data.videos.forEach(appendVideo);
+        } else if (data.movie) {
+            appendVideo(data.movie);
+        } else if (data.main_image) {
+            // 動画がない場合のみメイン画像を先頭へ
+            appendImage(data.main_image, "Main Image");
         }
 
-        // 2ページ目以降: images または videos
-        // if (projectData.videos?.length) {
-        //     projectData.videos.forEach((video) => {
-        //         sliderContent.push(`
-        //             <div>
-        //                 <video src="${video}" controls class="media-fluid" 
-        //                     style="width: 100%; max-height: 500px; object-fit: contain;">
-        //                 </video>
-        //             </div>
-        //         `);
-        //     });
-        // } else 
-        if (projectData.images?.length) {
-            projectData.images.forEach((image) => {
-                sliderContent.push(`
-                    <div>
-                        <img src="${image}" alt="Slide Image" class="media-fluid" 
-                            style="width: 100%; max-height: 500px; object-fit: contain;" />
-                    </div>
-                `);
-            });
+        // 2. 追加画像を後続スライドとして追加
+        if (Array.isArray(data.images) && data.images.length) {
+            data.images.forEach((imgSrc) => appendImage(imgSrc));
         }
 
-        sliderContainer.innerHTML = sliderContent.join("");
+        container.innerHTML = slides.join("\n");
     };
 
-    // ページ番号の更新
+    /* ------------------------------------------------------------------
+     *  スライダーのページ番号を更新
+     * ---------------------------------------------------------------- */
     const updatePageNumber = (info) => {
-        const currentIndex = info.displayIndex || info.index + 1; // 現在のスライド番号
-        const totalSlides = info.slideCount; // 総スライド数
+        const currentIndex = info.displayIndex || info.index + 1;
         const pageNumber = document.getElementById("page-number");
-        if (pageNumber) {
-            pageNumber.textContent = `${currentIndex} / ${totalSlides}`;
-        }
+        if (pageNumber) pageNumber.textContent = `${currentIndex} / ${info.slideCount}`;
     };
 
+    /* ------------------------------------------------------------------
+     *  レンダリング
+     * ---------------------------------------------------------------- */
     if (loading) {
-        return <Loader color="#808080" size="3rem" />; // カスタム色とサイズで表示
+        return <Loader color="#808080" size="3rem" />;
     }
-
 
     if (!projectData) {
         return (
@@ -130,24 +167,24 @@ const ProjectDetail = () => {
         );
     }
 
+    // タイプ（口頭発表など）のバッジ色を決定
     const getTypeColor = (type) => {
         switch (type) {
             case "口頭発表":
-                return "#336699"; // 青
+                return "#336699";
             case "デモポスター":
-                return "#e97132"; // オレンジ
+                return "#e97132";
             case "フルペーパー":
-                return "#cc0000"; // 赤
+                return "#cc0000";
             case "一般":
-                return "#009933"; // 緑
+                return "#009933";
             default:
-                return "#52565e"; // グレー
+                return "#52565e";
         }
     };
 
     return (
         <>
-            {/* ヘッダー */}
             <Header />
 
             <div className="section bg-white py-4">
@@ -168,17 +205,11 @@ const ProjectDetail = () => {
                         <div className="my-slider-container">
                             <div className="my-slider"></div>
                             <div className="slider-controls text-center mt-2">
-                                <button
-                                    className="tns-prev btn btn-light border me-2"
-                                    style={{ fontSize: "14px", padding: "5px 10px" }}
-                                >
+                                <button className="tns-prev btn btn-light border me-2" style={{ fontSize: "14px", padding: "5px 10px" }}>
                                     Prev
                                 </button>
                                 <span id="page-number" className="text-muted"></span>
-                                <button
-                                    className="tns-next btn btn-light border ms-2"
-                                    style={{ fontSize: "14px", padding: "5px 10px" }}
-                                >
+                                <button className="tns-next btn btn-light border ms-2" style={{ fontSize: "14px", padding: "5px 10px" }}>
                                     Next
                                 </button>
                             </div>
@@ -189,23 +220,19 @@ const ProjectDetail = () => {
 
                     {/* 詳細情報 */}
                     <div className="unit-4 d-flex flex-column mt-4">
-                        <p>{projectData.date || ""}{"　"}
-                            {projectData.type?.map((type, index) => (
+                        <p>
+                            {projectData.date || ""}
+                            {"\u3000"}
+                            {projectData.type?.map((t, idx) => (
                                 <span
-                                    key={index}
+                                    key={idx}
                                     className="badge me-1"
-                                    style={{
-                                        backgroundColor: getTypeColor(type),
-                                        color: "white",
-                                    }}
+                                    style={{ backgroundColor: getTypeColor(t), color: "white" }}
                                 >
-                                    {type}
+                                    {t}
                                 </span>
-
                             ))}
                         </p>
-                        {/* <p><strong>Location:</strong> {projectData.location || ""}</p> */}
-                        {/* <p>{projectData.authors?.join(", ") || ""}</p> */}
                     </div>
                     <div className="unit-4 d-flex flex-column">
                         <p>{projectData.description || ""}</p>
@@ -215,65 +242,37 @@ const ProjectDetail = () => {
 
                     <div className="unit-4 d-flex flex-column">
                         {projectData.journal && (
-                            <>
-                                {/* <p>
-                                    <strong>Journal:</strong> {projectData.journal.name || ""}
-                                </p>
-                                <p>
-                                    <strong>Volume:</strong> {projectData.journal.volume || ""} &emsp;
-                                    <strong>Number:</strong> {projectData.journal.number || ""} &emsp;
-                                    <strong>Pages:</strong> {projectData.journal.pages || ""}
-                                </p> */}
-                                <p className="d-flex flex-wrap gap-2"> {/* Flexレイアウトと隙間を調整 */}
-                                    {projectData.sourceUrl && (
-                                        <a
-                                            href={projectData.sourceUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-outline-secondary d-inline-flex align-items-center"
-                                            style={{
-                                                textDecoration: "none",
-                                                padding: "5px 15px",
-                                                fontSize: "14px",
-                                                borderRadius: "20px",
-                                                color: "#6c757d", // 灰色のテキスト色
-                                                borderColor: "#6c757d", // 灰色のボーダー
-                                            }}
-                                        >
-                                            <FaFileAlt style={{ marginRight: "5px", color: "#6c757d" }} /> Paper
-                                        </a>
-                                    )}
-                                    {projectData.award && (
-                                        <a
-                                            href={projectData.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-outline-secondary d-inline-flex align-items-center"
-                                            style={{
-                                                textDecoration: "none",
-                                                padding: "5px 15px",
-                                                fontSize: "14px",
-                                                borderRadius: "20px",
-                                                color: "#6c757d", // 灰色のテキスト色
-                                                borderColor: "#6c757d", // 灰色のボーダー
-                                            }}
-                                        >
-                                            <FaTrophy style={{ marginRight: "5px", color: "#6c757d", fontSize: "16px" }} /> {/* トロフィーアイコン */}
-                                            <span style={{ color: "#6c757d", fontSize: "14px" }}>{projectData.award}</span>
-                                        </a>
-                                    )}
-
-                                </p>
-                            </>
+                            <p className="d-flex flex-wrap gap-2">
+                                {projectData.sourceUrl && (
+                                    <a
+                                        href={projectData.sourceUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-outline-secondary d-inline-flex align-items-center"
+                                        style={{ textDecoration: "none", padding: "5px 15px", fontSize: "14px", borderRadius: "20px", color: "#6c757d", borderColor: "#6c757d" }}
+                                    >
+                                        <FaFileAlt style={{ marginRight: "5px", color: "#6c757d" }} /> Paper
+                                    </a>
+                                )}
+                                {projectData.award && (
+                                    <a
+                                        href={projectData.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-outline-secondary d-inline-flex align-items-center"
+                                        style={{ textDecoration: "none", padding: "5px 15px", fontSize: "14px", borderRadius: "20px", color: "#6c757d", borderColor: "#6c757d" }}
+                                    >
+                                        <FaTrophy style={{ marginRight: "5px", color: "#6c757d", fontSize: "16px" }} />
+                                        <span style={{ color: "#6c757d", fontSize: "14px" }}>{projectData.award}</span>
+                                    </a>
+                                )}
+                            </p>
                         )}
                     </div>
-
-
                 </div>
             </div>
 
-            {/* フッター */}
-            <Footer></Footer>
+            <Footer />
         </>
     );
 };
