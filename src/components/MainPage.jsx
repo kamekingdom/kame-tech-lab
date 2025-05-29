@@ -15,7 +15,6 @@ import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { FaRegStickyNote } from "react-icons/fa";
 
 
-
 const MainPage = () => {
     const [projects, setProjects] = useState([]); // プロジェクトデータを格納するステート
     const [sortCriterion, setSortCriterion] = useState("all");
