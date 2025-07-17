@@ -94,6 +94,7 @@ const MainPage = () => {
 
         elements.forEach((el) => observer.observe(el));
         return () => observer.disconnect();
+
     }, [isLoading]);
 
     // ソートされたプロジェクト
@@ -163,6 +164,7 @@ const MainPage = () => {
             <Header></Header>
 
             <section id="section-aboutme" className="py-5 bg-white fade-up" style={{ backgroundColor: "#f8f9fa" }}>
+
                 <div className="container">
                     <div className="row mb-3">
                         <div className="text-center mb-3">
@@ -234,6 +236,7 @@ const MainPage = () => {
 
             {/* 活動セクション */}
             <section id="section-works" className="py-5 bg-light fade-up">
+
                 <div className="container">
                     {isLoading ? (
                         <Loader color="#808080" size="3rem" /> // ローダーを適用
@@ -298,6 +301,7 @@ const MainPage = () => {
                                 {filteredProjects.length > 0 ? (
                                     filteredProjects.map((project) => (
                                         <div className="col-lg-4 col-md-6 col-sm-12 d-flex fade-up" key={project.id}>
+
                                             <div
                                                 className="card shadow-sm flex-fill"
                                                 onClick={() => navigate(`./project-detail?id=${project.id}`)} // カード全体をクリック可能に
