@@ -20,5 +20,13 @@
     "tag_demo": "Demo",
     "tag_full": "Full Paper",
     "tag_general": "General",
-    "tag_internal": "Internal"
+    "tag_internal": "Internal",
+    "tech_category_language": "Programming Languages",
+    "tech_category_web": "Web Development",
+    "tech_category_cloud": "Cloud / Containers",
+    "tech_category_ml": "Machine Learning APIs",
+    "tech_category_media": "Media Art",
+    "tech_category_game": "Game Development",
+    "carousel_next": "Next Slide",
+    "carousel_prev": "Previous Slide"
 }

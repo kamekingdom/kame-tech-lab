@@ -11,8 +11,7 @@ import Footer from "./Footer";
 import "../style.css";
 import Loader from "./Loader";
 import { useTranslation } from "react-i18next"; // i18n用フックのインポート
-import { FaLinkedin, FaGithub } from "react-icons/fa";
-import { FaRegStickyNote } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 
 
 const MainPage = () => {
@@ -183,8 +182,8 @@ const MainPage = () => {
                                     <h4 style={{ fontWeight: "bold", fontSize: "1.25rem", marginBottom: "15px" }}>{t("profile_link_title")}</h4>
                                     <ul style={{ color: "#606060", listStyleType: "none", paddingLeft: "0", marginBottom: "0" }}>
                                         <li>
-                                            <a href="https://note.com/kamekingdom" target="_blank" rel="noopener noreferrer" style={{ color: "#41c9b4", textDecoration: "none", display: "flex", alignItems: "center" }}>
-                                                <FaRegStickyNote style={{ marginRight: "8px" }} /> Note
+                                            <a href="mailto:yudainakamura@keio.jp" style={{ color: "#D44638", textDecoration: "none", display: "flex", alignItems: "center" }}>
+                                                <FaEnvelope style={{ marginRight: "8px" }} /> Email
                                             </a>
                                         </li>
                                         <li>
@@ -213,6 +212,7 @@ const MainPage = () => {
                 </div>
             </section >
 
+            {/* <TechStackSection /> */}
 
             {/* 活動セクション */}
             < section id="section-works" className="py-5 bg-light" >

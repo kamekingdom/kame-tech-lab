@@ -20,5 +20,11 @@
     "tag_demo": "デモポスター",
     "tag_full": "フルペーパー",
     "tag_general": "一般",
-    "tag_internal": "学内発表"
+    "tag_internal": "学内発表",
+    "tech_category_language": "プログラミング言語",
+    "tech_category_web": "Web 開発",
+    "tech_category_cloud": "クラウド／コンテナ",
+    "tech_category_ml": "機械学習 API",
+    "tech_category_media": "メディアアート",
+    "tech_category_game": "ゲーム開発"
 }
