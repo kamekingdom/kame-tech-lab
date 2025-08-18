@@ -77,27 +77,6 @@ const MainPage = () => {
     fetchProjects();
   }, [sortProjects]);
 
-  // Trigger fade animations when elements enter the viewport
-  useEffect(() => {
-    const elements = document.querySelectorAll(".fade-up");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [isLoading]);
-
   // ソートされたプロジェクト
   const sortedProjects = sortProjects(projects, sortCriterion);
 
@@ -170,7 +149,7 @@ const MainPage = () => {
 
       <section
         id="section-aboutme"
-        className="py-5 bg-white fade-up"
+        className="py-5 bg-white"
         style={{ backgroundColor: "#f8f9fa" }}
       >
         <div className="container">
@@ -342,7 +321,7 @@ const MainPage = () => {
       {/* <TechStackSection /> */}
 
       {/* 活動セクション */}
-      <section id="section-works" className="py-5 bg-light fade-up">
+      <section id="section-works" className="py-5 bg-light">
         <div className="container">
           {isLoading ? (
             <Loader color="#808080" size="3rem" /> // ローダーを適用
@@ -407,7 +386,7 @@ const MainPage = () => {
                 {filteredProjects.length > 0 ? (
                   filteredProjects.map((project) => (
                     <div
-                      className="col-lg-4 col-md-6 col-sm-12 d-flex fade-up"
+                      className="col-lg-4 col-md-6 col-sm-12 d-flex"
                       key={project.id}
                     >
                       <div
