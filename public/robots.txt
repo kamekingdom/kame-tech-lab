@@ -2,4 +2,7 @@
 User-agent: *
 Disallow:
 
+User-agent: Bingbot
+Allow: /
+
 Sitemap: https://kame-tech-lab.web.app/sitemap.xml
